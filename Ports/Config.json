@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "name": "outbound",
+      "description": "Outbound"
+    },
+    {
+      "name": "web-out",
+      "description": "Web",
+      "rules": [
+        "web-out"
+      ]
+    },
+    {
+      "name": "chrome-web-out",
+      "description": "Chrome",
+      "rules": [
+        "chrome-web-out"
+      ]
+    }
+  ]
+}
