@@ -90,7 +90,7 @@
     <Compile Include="Configuration\ConfigException.cs" />
     <Compile Include="Configuration\EntryConfig.cs" />
     <Compile Include="Firewall\FirewallManager.cs" />
-    <Compile Include="IconExtractor.cs" />
+    <Compile Include="Utils\IconExtractor.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
