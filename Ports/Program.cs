@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NetFwTypeLib;
+
 using Serilog;
+
 using Ports.Configuration;
+using Ports.Firewall;
 
 namespace Ports
 {
@@ -27,12 +29,12 @@ namespace Ports
                 var config = Config.Get();
 
                 Log.Information("Accessing firewall policy ...");
-                var firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
+                var firewallManager = FirewallManager.Instance;
 
                 Log.Information("Starting UI ...");
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Main(config, firewallPolicy));
+                Application.Run(new Main(config));
             }
             catch (ConfigException ex)
             {

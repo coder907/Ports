@@ -1,8 +1,16 @@
 {
   "entries": [
     {
-      "name": "outbound",
-      "description": "Outbound"
+      "name": "domain",
+      "description": "Domain"
+    },
+    {
+      "name": "private",
+      "description": "Private"
+    },
+    {
+      "name": "public",
+      "description": "Public"
     },
     {
       "name": "web-out",

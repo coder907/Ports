@@ -89,6 +89,7 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigException.cs" />
     <Compile Include="Configuration\EntryConfig.cs" />
+    <Compile Include="Firewall\FirewallManager.cs" />
     <Compile Include="IconExtractor.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -151,5 +152,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

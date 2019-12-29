@@ -5,21 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NetFwTypeLib;
+
 using Ports.Configuration;
+using Ports.Firewall;
 
 namespace Ports
 {
     public partial class Main : Form
     {
         private readonly Config config;
-        private readonly INetFwPolicy2 firewallPolicy;
         private readonly IList<Button> buttons = new List<Button>();
 
-        public Main(Config config, INetFwPolicy2 firewallPolicy)
+        public Main(Config config)
         {
             this.config = config;
-            this.firewallPolicy = firewallPolicy;
 
             InitializeComponent();
             CreateUI();
@@ -79,73 +78,14 @@ namespace Ports
 
         private void UpdateButton(Button button, bool toggle = false)
         {
-            var entry = config.Entries.FirstOrDefault(ent => ent.Name == button.Tag.ToString());
-            var entryName = entry.Name.ToLowerInvariant();
+            var entry = config.Entries.First(ent => ent.Name == button.Tag.ToString());
 
-            if (entryName == "public")
+            if (toggle)
             {
-                var profileType = NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC;
-
-                if (toggle)
-                {
-                    ToggleProfileRule(profileType);
-                }
-
-                UpdateButtonColor(button, firewallPolicy.DefaultOutboundAction[profileType] == NET_FW_ACTION_.NET_FW_ACTION_ALLOW);
+                FirewallManager.Instance.Toggle(entry);
             }
-            else if (entryName == "private")
-            {
-                var profileType = NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE;
 
-                if (toggle)
-                {
-                    ToggleProfileRule(profileType);
-                }
-
-                UpdateButtonColor(button, firewallPolicy.DefaultOutboundAction[profileType] == NET_FW_ACTION_.NET_FW_ACTION_ALLOW);
-            }
-            else
-            {
-                if (toggle)
-                {
-                    ToggleRules(entry.Rules);
-                }
-
-                UpdateButtonColor(button, firewallPolicy.Rules.Item(entry.Rules[0]).Enabled);
-            }
-        }
-
-        private void ToggleProfileRule(NET_FW_PROFILE_TYPE2_ profileType)
-        {
-            if (firewallPolicy.DefaultOutboundAction[profileType] == NET_FW_ACTION_.NET_FW_ACTION_BLOCK)
-            {
-                firewallPolicy.DefaultOutboundAction[profileType] = NET_FW_ACTION_.NET_FW_ACTION_ALLOW;
-            }
-            else
-            {
-                firewallPolicy.DefaultOutboundAction[profileType] = NET_FW_ACTION_.NET_FW_ACTION_BLOCK;
-            }
-        }
-
-        private void ToggleRules(IEnumerable<string> rules)
-        {
-            foreach (var name in rules)
-            {
-                var rule = firewallPolicy.Rules.Item(name);
-                rule.Enabled = !rule.Enabled;
-            }
-        }
-
-        private void UpdateButtonColor(Button button, bool condition)
-        {
-            if (condition)
-            {
-                button.ForeColor = Color.Green;
-            }
-            else
-            {
-                button.ForeColor = Color.Red;
-            }
+            button.ForeColor = FirewallManager.Instance.IsEnabled(entry) ? Color.Green : Color.Red;
         }
     }
 }
